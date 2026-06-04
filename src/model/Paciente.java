@@ -3,13 +3,22 @@ package model;
 import abstracts.Usuario;
 import interfaces.Monitoravel;
 
-public class Paciente extends Usuario implements Monitoravel {
+public class Paciente extends Usuario
+        implements Monitoravel {
 
     private int idade;
     private String sintomas;
     private String historicoMedico;
 
-    public Paciente(int id, String nome, String cpf, String telefone, String login, String senha, int idade, String sintomas, String historicoMedico) {
+    public Paciente(int id,
+                    String nome,
+                    String cpf,
+                    String telefone,
+                    String login,
+                    String senha,
+                    int idade,
+                    String sintomas,
+                    String historicoMedico) {
 
         super(id, nome, cpf, telefone, login, senha);
 
@@ -20,7 +29,7 @@ public class Paciente extends Usuario implements Monitoravel {
 
     public void solicitarConsulta() {
 
-        System.out.println("Consulta solicitada");
+        System.out.println("Consulta solicitada.");
     }
 
     public void visualizarHistorico() {
@@ -41,36 +50,48 @@ public class Paciente extends Usuario implements Monitoravel {
     @Override
     public void emitirAlerta() {
 
-        System.out.println("Alerta médico emitido");
+        System.out.println("Alerta emitido para o paciente.");
     }
 
     @Override
     public void gerarRelatorio() {
 
-        System.out.println("Relatório do paciente gerado");
+        System.out.println("Relatório do paciente gerado.");
+    }
+
+    @Override
+    public String toString() {
+
+        return getNome();
     }
 
     public int getIdade() {
+
         return idade;
     }
 
     public void setIdade(int idade) {
+
         this.idade = idade;
     }
 
     public String getSintomas() {
+
         return sintomas;
     }
 
     public void setSintomas(String sintomas) {
+
         this.sintomas = sintomas;
     }
 
     public String getHistoricoMedico() {
+
         return historicoMedico;
     }
 
     public void setHistoricoMedico(String historicoMedico) {
+
         this.historicoMedico = historicoMedico;
     }
 }

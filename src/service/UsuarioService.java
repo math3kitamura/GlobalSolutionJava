@@ -1,36 +1,84 @@
 package service;
 
-import model.Paciente;
-import model.Medico;
+import abstracts.Usuario;
 import model.Administrador;
+import model.Medico;
+import model.Paciente;
 
 import java.util.ArrayList;
 
 public class UsuarioService {
+    private ArrayList<Usuario> usuarios = new ArrayList();
 
-    private ArrayList<Object> usuarios =
-            new ArrayList<>();
-
-    public void cadastrarUsuario(Object usuario) {
-
-        usuarios.add(usuario);
-
-        System.out.println("Usuário cadastrado");
+    public UsuarioService() {
+        this.usuarios.add(new Administrador(1, "Administrador", "00000000000", "11999999999", "admin", "123"));
     }
 
-    public void listarUsuarios() {
+    public void cadastrarUsuario(Usuario usuario) {
+        this.usuarios.add(usuario);
+    }
 
-        for (Object usuario : usuarios) {
-
-            System.out.println(usuario);
+    public boolean autenticarUsuario(String login, String senha) {
+        for(Usuario usuario : this.usuarios) {
+            if (usuario.autenticar(login, senha)) {
+                return true;
+            }
         }
+
+        return false;
     }
 
-    public boolean autenticarUsuario(String login,
-                                     String senha) {
+    public ArrayList<Usuario> listarUsuarios() {
+        return this.usuarios;
+    }
 
-        System.out.println("Validando login...");
+    public ArrayList<Paciente> listarPacientes() {
+        ArrayList<Paciente> pacientes = new ArrayList();
 
-        return true;
+        for(Usuario usuario : this.usuarios) {
+            if (usuario instanceof Paciente) {
+                pacientes.add((Paciente)usuario);
+            }
+        }
+
+        return pacientes;
+    }
+
+    public ArrayList<Medico> listarMedicos() {
+        ArrayList<Medico> medicos = new ArrayList();
+
+        for(Usuario usuario : this.usuarios) {
+            if (usuario instanceof Medico) {
+                medicos.add((Medico)usuario);
+            }
+        }
+
+        return medicos;
+    }
+
+    public ArrayList<Administrador> listarAdministradores() {
+        ArrayList<Administrador> administradores = new ArrayList();
+
+        for(Usuario usuario : this.usuarios) {
+            if (usuario instanceof Administrador) {
+                administradores.add((Administrador)usuario);
+            }
+        }
+
+        return administradores;
+    }
+
+    public int quantidadeUsuarios() {
+        return this.usuarios.size();
+    }
+
+    public Usuario buscarUsuarioPorId(int id) {
+        for(Usuario usuario : this.usuarios) {
+            if (usuario.getId() == id) {
+                return usuario;
+            }
+        }
+
+        return null;
     }
 }
