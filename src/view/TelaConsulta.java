@@ -6,7 +6,12 @@ import model.Medico;
 import model.Paciente;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class TelaConsulta extends JFrame {
 
@@ -18,11 +23,11 @@ public class TelaConsulta extends JFrame {
         JComboBox<Medico> cbMedico =
                 new JComboBox<>();
 
-        JTextField txtData =
-                new JTextField();
+        JFormattedTextField txtData =
+                criarCampoData();
 
-        JTextField txtHorario =
-                new JTextField();
+        JFormattedTextField txtHorario =
+                criarCampoHorario();
 
         for (Paciente p :
                 Main.usuarioService
@@ -64,6 +69,25 @@ public class TelaConsulta extends JFrame {
 
         btnAgendar.addActionListener(e -> {
 
+            String data = txtData.getText();
+            String horario = txtHorario.getText();
+
+            if (!validarData(data)) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Digite uma data válida no formato dd/MM/aaaa."
+                );
+                return;
+            }
+
+            if (!validarHorario(horario)) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Digite um horário válido no formato HH:mm."
+                );
+                return;
+            }
+
             Consulta consulta =
                     new Consulta(
                             Main.consultaService
@@ -75,9 +99,9 @@ public class TelaConsulta extends JFrame {
                             (Medico)
                                     cbMedico.getSelectedItem(),
 
-                            txtData.getText(),
+                            data,
 
-                            txtHorario.getText()
+                            horario
                     );
 
             Main.consultaService
@@ -95,5 +119,63 @@ public class TelaConsulta extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    private JFormattedTextField criarCampoData() {
+        try {
+            MaskFormatter mascaraData =
+                    new MaskFormatter("##/##/####");
+
+            mascaraData.setPlaceholderCharacter('_');
+
+            return new JFormattedTextField(mascaraData);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JFormattedTextField();
+        }
+    }
+
+    private JFormattedTextField criarCampoHorario() {
+        try {
+            MaskFormatter mascaraHorario =
+                    new MaskFormatter("##:##");
+
+            mascaraHorario.setPlaceholderCharacter('_');
+
+            return new JFormattedTextField(mascaraHorario);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JFormattedTextField();
+        }
+    }
+
+    private boolean validarData(String data) {
+        try {
+            DateTimeFormatter formato =
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            LocalDate.parse(data, formato);
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean validarHorario(String horario) {
+        try {
+            DateTimeFormatter formato =
+                    DateTimeFormatter.ofPattern("HH:mm");
+
+            LocalTime.parse(horario, formato);
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
