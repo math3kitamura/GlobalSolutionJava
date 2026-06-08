@@ -134,35 +134,6 @@ public class TelaCadastroMedico extends JFrame {
                 cpf.equals("99999999999")) {
             return false;
         }
-
-        int soma = 0;
-
-        for (int i = 0; i < 9; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
-        }
-
-        int primeiroDigito = 11 - (soma % 11);
-
-        if (primeiroDigito >= 10) {
-            primeiroDigito = 0;
-        }
-
-        if (primeiroDigito != Character.getNumericValue(cpf.charAt(9))) {
-            return false;
-        }
-
-        soma = 0;
-
-        for (int i = 0; i < 10; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
-        }
-
-        int segundoDigito = 11 - (soma % 11);
-
-        if (segundoDigito >= 10) {
-            segundoDigito = 0;
-        }
-
-        return segundoDigito == Character.getNumericValue(cpf.charAt(10));
+        return true;
     }
 }
